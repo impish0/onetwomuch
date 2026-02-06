@@ -1,5 +1,7 @@
 import * as React from "react"
 import { CircleCheckBig } from "lucide-react"
+import { LogOut } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth.js"
 
 import {
   Sidebar,
@@ -12,6 +14,7 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
   SidebarRail,
+  SidebarFooter,
 } from "@/components/ui/sidebar"
 
 // This is sample data.
@@ -40,7 +43,14 @@ const data = {
 
 export function AppSidebar({
   ...props
-}) {
+}) 
+{
+  const { signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    await signOut()
+    window.location.href="/login"
+  }
   return (
     <Sidebar {...props} className="bg-[var(--sidebar-background)]">
       <SidebarContent>
@@ -53,8 +63,7 @@ export function AppSidebar({
                   <CircleCheckBig className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">ToDo App</span>
-                  <span className="">ToDo App</span>
+                  <span className="font-medium">OneTwoMuch</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -80,6 +89,16 @@ export function AppSidebar({
         ))}
       </SidebarContent>
       <SidebarRail />
+       <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={handleSignOut}>
+              <LogOut />
+              <span className="font-medium">Sign Out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

@@ -1,31 +1,33 @@
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { FieldSet, FieldGroup, Field } from "@/components/ui/field.jsx"
-import { Textarea } from "@/components/ui/textarea"
-
-const supabase = createClient()
+import { useEffect, useState, useCallback } from 'react'
+import { supabase } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { FieldSet, FieldGroup, Field } from '@/components/ui/field.jsx'
+import { Textarea } from '@/components/ui/textarea'
+import { useAuth } from './hooks/useAuth.js'
 
 function AddTask() {
-  const [tasks, setTasks] = useState([])
-  const [title, setTitle ] = useState('')
-  const [description, setDescription] = useState('')
+  const { user, loading } = useAuth()
+  const [ tasks, setTasks ] = useState([])
+  const [ title, setTitle ] = useState('')
+  const [ description, setDescription ] = useState('')
 
-  useEffect(() => {
-    fetchTasks()
+const fetchTasks = useCallback(async () => {
+  const { data, error } = await supabase
+    .from('tasks')
+    .select('*')
+    .order('created_at', { ascending: true })
+
+  if (error) console.error(error)
+  else setTasks(data)
   }, [])
 
-  async function fetchTasks() {
-    const { data, error } = await supabase
-      .from('tasks')
-      .select('*')
-      .order('created_at', { ascending: true })
-
-    if (error) console.error(error)
-    else setTasks(data)
-  }
+  useEffect(() => {
+    if (!loading && user) {
+      fetchTasks()
+    }
+  }, [loading, user, fetchTasks])
 
   async function addTask() {
     if (!title.trim()) return

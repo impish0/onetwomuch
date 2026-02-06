@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -24,7 +24,6 @@ export function SignUpForm({
   const [success, setSuccess] = useState(false)
 
   const handleSignUp = async (e) => {
-    const supabase = createClient()
     e.preventDefault()
     setError(null)
 
@@ -53,7 +52,7 @@ export function SignUpForm({
       {success ? (
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Thank you for signing up!</CardTitle>
+            <CardTitle className="text-2xl">Welcome to OneTwoMuch!</CardTitle>
             <CardDescription>Check your email to confirm</CardDescription>
           </CardHeader>
           <CardContent>
