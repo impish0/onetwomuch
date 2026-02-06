@@ -5,10 +5,12 @@ import { Separator } from '@/components/ui/separator'
 import { FieldSet, FieldGroup, Field } from '@/components/ui/field.jsx'
 import { Textarea } from '@/components/ui/textarea'
 import { useTasks } from '@/hooks/useTasks.js'
+import { EditTaskSheet } from '@/components/EditTaskSheet.jsx'
 
 function AddTask() {
   const { tasks, addTask, updateTask, deleteTask, completeTask } = useTasks()
 
+  const [ editingTask, setEditingTask ] = useState(null)
   const [ title, setTitle ] = useState('')
   const [ description, setDescription ] = useState('')
 
@@ -59,16 +61,7 @@ function AddTask() {
                 <div>
                   <Button className="mb-4 w-80" variant="default" size="sm" onClick={() => completeTask(tasks.id)}>Complete</Button>
                   <div>
-                  <Button className="m-1 w-40" variant="secondary" size="sm" onClick={() => {
-                    const newTitle = prompt('New title:', tasks.title)
-                    const newDescription = prompt('New description:', tasks.description)
-                    if (newTitle !== null) {
-                      updateTask(tasks.id, {
-                        title: newTitle || tasks.title,
-                        description: newDescription || tasks.description
-                    })
-                  }
-                }}>Update</Button>
+                  <Button className="m-1 w-40" variant="secondary" size="sm" onClick={() => setEditingTask(tasks)}>Update</Button>
                   <Button className="m-1 w-40" variant="destructive" size="sm" onClick={() => deleteTask(tasks.id)}>Delete</Button>
                   </div>
                 </div>
@@ -95,6 +88,12 @@ function AddTask() {
           ))}
       </div>
       </div>
+      <EditTaskSheet
+        task={editingTask}
+        isOpen={editingTask !== null}
+        onClose={() => setEditingTask(null)}
+        onUpdate={updateTask}
+        />
     </div>
   )
 }
