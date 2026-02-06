@@ -1,66 +1,27 @@
-import { useEffect, useState, useCallback } from 'react'
-import { supabase } from '@/lib/supabase/client'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { FieldSet, FieldGroup, Field } from '@/components/ui/field.jsx'
 import { Textarea } from '@/components/ui/textarea'
-import { useAuth } from './hooks/useAuth.js'
+import { useTasks } from '@/hooks/useTasks.js'
 
 function AddTask() {
-  const { user, loading } = useAuth()
-  const [ tasks, setTasks ] = useState([])
+  const { tasks, addTask, updateTask, deleteTask, completeTask } = useTasks()
+
   const [ title, setTitle ] = useState('')
   const [ description, setDescription ] = useState('')
 
-const fetchTasks = useCallback(async () => {
-  const { data, error } = await supabase
-    .from('tasks')
-    .select('*')
-    .order('created_at', { ascending: true })
-
-  if (error) console.error(error)
-  else setTasks(data)
-  }, [])
-
-  useEffect(() => {
-    if (!loading && user) {
-      fetchTasks()
-    }
-  }, [loading, user, fetchTasks])
-
-  async function addTask() {
-    if (!title.trim()) return
-    const { error } = await supabase.from('tasks').insert([{ title, description }])
-    if (error) console.error(error)
-    else {
-      setTitle('')
-      setDescription('')
-      fetchTasks()
-    }
-  }
-
-  async function updateTask(id, newTitle) {
-    await supabase.from('tasks').update({ title: newTitle }).eq('id', id)
-    fetchTasks()
-  }
-
-  async function deleteTask(id) {
-    await supabase.from('tasks').delete().eq('id', id)
-    fetchTasks()
-  }
-
-  async function completeTask(id) {
-    await supabase.from('tasks').update({ completed: true }).eq('id', id)
-    fetchTasks()
+  const handleAddTask = async () => {
+    await addTask(title, description)
+    setTitle('')
+    setDescription('')
   }
 
   return (
     <div>
-
       <div className="max-w-2xl mx-auto p-4">
       <h2 className="text-lg pb-4 text-center">Add A New Task</h2>
-      
       <FieldSet>
         <FieldGroup>
           <Field>
@@ -78,7 +39,7 @@ const fetchTasks = useCallback(async () => {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Description (optional)" />
           </Field>
-          <Button variant="default" size="sm" onClick={addTask}>Add</Button>
+          <Button variant="default" size="sm" onClick={handleAddTask}>Add</Button>
         </FieldGroup>
       </FieldSet>
 
