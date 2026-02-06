@@ -26,20 +26,20 @@ const fetchTasks = useCallback(async () => {
     }, [fetchTasks])
 
     // Update task
-    const updateTask = useCallback(async (id, newTitle) => {
-      await supabase.from('tasks').update({ title: newTitle }).eq('id', id)
+    const updateTask = useCallback(async (id, updates) => {
+      await supabase.from('tasks').update(updates).eq('id', id)
+      fetchTasks()
+    }, [fetchTasks])
+
+    // complete task
+    const completeTask = useCallback(async (id) => {
+      await supabase.from('tasks').update({ completed: true }).eq('id', id)
       fetchTasks()
     }, [fetchTasks])
   
     // Delete task
     const deleteTask = useCallback(async (id) => {
       await supabase.from('tasks').delete().eq('id', id)
-      fetchTasks()
-    }, [fetchTasks])
-  
-    // complete task
-    const completeTask = useCallback(async (id) => {
-      await supabase.from('tasks').update({ completed: true }).eq('id', id)
       fetchTasks()
     }, [fetchTasks])
 

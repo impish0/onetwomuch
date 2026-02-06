@@ -20,6 +20,7 @@ function AddTask() {
 
   return (
     <div>
+
       <div className="max-w-2xl mx-auto p-4">
       <h2 className="text-lg pb-4 text-center">Add A New Task</h2>
       <FieldSet>
@@ -54,10 +55,20 @@ function AddTask() {
           tasks.filter(t => !t.completed).map(tasks => (
             <div className="m-4 text-center bg-[var(--card)] border-solid border border-[var(--border)] p-6 rounded w-2/3 mx-auto dark" key={tasks.id}>
               <div className="pb-6 font-bold text-sm">{tasks.title}</div>
+              {tasks.description && <div className="pb-6 text-sm">{tasks.description}</div>}
                 <div>
                   <Button className="mb-4 w-80" variant="default" size="sm" onClick={() => completeTask(tasks.id)}>Complete</Button>
                   <div>
-                  <Button className="m-1 w-40" variant="secondary" size="sm" onClick={() => updateTask(tasks.id, prompt('New title:', tasks.title))}>Update</Button>
+                  <Button className="m-1 w-40" variant="secondary" size="sm" onClick={() => {
+                    const newTitle = prompt('New title:', tasks.title)
+                    const newDescription = prompt('New description:', tasks.description)
+                    if (newTitle !== null) {
+                      updateTask(tasks.id, {
+                        title: newTitle || tasks.title,
+                        description: newDescription || tasks.description
+                    })
+                  }
+                }}>Update</Button>
                   <Button className="m-1 w-40" variant="destructive" size="sm" onClick={() => deleteTask(tasks.id)}>Delete</Button>
                   </div>
                 </div>
@@ -75,7 +86,8 @@ function AddTask() {
           .filter((t) => t.completed)
           .map((tasks) => (
             <div className="m-4 text-center bg-[var(--card)] border-solid border border[var(--border)] p-6 round w-2/3 mx-auto dark" key={tasks.id}>
-              <span className="pb-6 font-bold text-sm">{tasks.title}</span>
+              <div className="pb-6 font-bold text-sm">{tasks.title}</div>
+              {tasks.description && <div className="pb-6 text-sm">{tasks.description}</div>}
               <div>
               <Button  className="m-1" variant="destructive" size="sm" onClick={() => deleteTask(tasks.id)}>Delete</Button>
               </div>
