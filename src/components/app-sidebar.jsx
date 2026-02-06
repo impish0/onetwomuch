@@ -29,8 +29,8 @@ const data = {
           url: "/",
         },
         {
-          title: "Add Todo",
-          url: "/add-todo",
+          title: "Add Tasks",
+          url: "/add-tasks",
         },
         {
           title: "My Tasks",

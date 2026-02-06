@@ -17,30 +17,55 @@ const fetchTasks = useCallback(async () => {
   else setTasks(data)
   }, [])
 
-  // Add task function
-    const addTask = useCallback(async (title, description) => {
-      if (!title.trim()) return
-      const { error } = await supabase.from('tasks').insert([{ title, description }])
+    // Add task function
+    const addTask = useCallback(async (title, description, dueDate = null) => {
+    const trimmedTitle = title.trim()
+    const trimmedDescription = description?.trim() || ''
+    
+    if (!trimmedTitle) return
+
+    const { error } = await supabase.from('task').insert([{
+        title: trimmedTitle,
+        description: trimmedDescription,
+        due_date: dueDate
+    }])
+
       if (error) console.error(error)
         fetchTasks()
     }, [fetchTasks])
 
     // Update task
     const updateTask = useCallback(async (id, updates) => {
-      await supabase.from('tasks').update(updates).eq('id', id)
-      fetchTasks()
+        const { error } = await supabase.from('tasks').update({
+            title: updates.title?.trim(),
+            description: updates.description?.trim(),
+            due_date: updates.due_date
+        }).eq('id', id)
+
+        if (error) console.error(error)
+            fetchTasks()
     }, [fetchTasks])
 
     // complete task
     const completeTask = useCallback(async (id) => {
-      await supabase.from('tasks').update({ completed: true }).eq('id', id)
-      fetchTasks()
-    }, [fetchTasks])
+      const { error } = await supabase.from('tasks').update({
+        completed: true }).eq('id', id)
+
+        if (error) {
+            console.error('Task completion error:', error)
+         } else {
+              fetchTasks()
+         }
+        }, [fetchTasks])
   
     // Delete task
     const deleteTask = useCallback(async (id) => {
-      await supabase.from('tasks').delete().eq('id', id)
-      fetchTasks()
+      const { error } = await supabase.from('tasks').delete().eq('id', id)
+      if (error) {
+        console.error('Task delete error:', error)
+      } else {
+        fetchTasks()
+      }
     }, [fetchTasks])
 
     useEffect(() => {

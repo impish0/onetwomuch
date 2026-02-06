@@ -6,6 +6,7 @@ import { FieldSet, FieldGroup, Field } from '@/components/ui/field.jsx'
 import { Textarea } from '@/components/ui/textarea'
 import { useTasks } from '@/hooks/useTasks.js'
 import { EditTaskSheet } from '@/components/EditTaskSheet.jsx'
+import { DatePicker } from '@/components/DatePicker'
 
 function AddTask() {
   const { tasks, addTask, updateTask, deleteTask, completeTask } = useTasks()
@@ -13,6 +14,7 @@ function AddTask() {
   const [ editingTask, setEditingTask ] = useState(null)
   const [ title, setTitle ] = useState('')
   const [ description, setDescription ] = useState('')
+  const [ dueDate, setDueDate ] = useState(null)
 
   const handleAddTask = async () => {
     await addTask(title, description)
@@ -36,6 +38,12 @@ function AddTask() {
               placeholder="Add a new To-Do"/>
           </Field>
           <Field>
+            <DatePicker
+              value={dueDate}
+              onChange={setDueDate}
+              placeholder="Select a due date" />
+          </Field>
+          <Field>
             <Textarea
             id="description"
             value={description}
@@ -55,15 +63,12 @@ function AddTask() {
       <div>
         {
           tasks.filter(t => !t.completed).map(tasks => (
-            <div className="m-4 text-center bg-[var(--card)] border-solid border border-[var(--border)] p-6 rounded w-2/3 mx-auto dark" key={tasks.id}>
+            <div className="m-4 p-6 min-w-[300px] text-center bg-card border-solid border rounded w-2/3 mx-auto" key={tasks.id}>
               <div className="pb-6 font-bold text-sm">{tasks.title}</div>
               {tasks.description && <div className="pb-6 text-sm">{tasks.description}</div>}
                 <div>
-                  <Button className="mb-4 w-80" variant="default" size="sm" onClick={() => completeTask(tasks.id)}>Complete</Button>
-                  <div>
-                  <Button className="m-1 w-40" variant="secondary" size="sm" onClick={() => setEditingTask(tasks)}>Update</Button>
-                  <Button className="m-1 w-40" variant="destructive" size="sm" onClick={() => deleteTask(tasks.id)}>Delete</Button>
-                  </div>
+                  <Button className="m-2 w-1/3" variant="outline" size="sm" onClick={() => setEditingTask(tasks)}>Update</Button>
+                  <Button className="w-1/3" variant="default" size="sm" onClick={() => completeTask(tasks.id)}>Complete</Button>
                 </div>
               </div>
           ))}
@@ -78,7 +83,7 @@ function AddTask() {
         {tasks
           .filter((t) => t.completed)
           .map((tasks) => (
-            <div className="m-4 text-center bg-[var(--card)] border-solid border border[var(--border)] p-6 round w-2/3 mx-auto dark" key={tasks.id}>
+            <div className="m-4 min-w-[300px] text-center card border-solid border p-6 w-2/3 mx-auto" key={tasks.id}>
               <div className="pb-6 font-bold text-sm">{tasks.title}</div>
               {tasks.description && <div className="pb-6 text-sm">{tasks.description}</div>}
               <div>
