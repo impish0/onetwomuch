@@ -4,13 +4,15 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FieldSet, FieldGroup, Field } from '@/components/ui/field.jsx'
 import { Textarea } from '@/components/ui/textarea'
+import { DatePicker } from '@/components/DatePicker.jsx'
 
 export function EditTaskSheet({ task, isOpen, onClose, onUpdate }) {
     const [ title, setTitle ] = useState(task?.title || '')
     const [ description, setDescription ] = useState(task?.description || '')
+    const [dueDate, setDueDate] = useState(task?.due_date ? new Date(task.due_date) : null)
 
     const handleSave = async () => {
-    await onUpdate(task.id, { title, description })
+    await onUpdate(task.id, { title, description, due_date: dueDate })
     onClose()
 }
 
@@ -18,6 +20,7 @@ useEffect(() => {
     if (task) {
         setTitle(task.title || '')
         setDescription(task.description || '')
+        setDueDate(task.due_date ? new Date(task.due_date) : null)
     }
 }, [task])
 
@@ -39,6 +42,12 @@ return (
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Update Title"/>
                 </Field>
+                <Field>
+                  <DatePicker
+                    value={dueDate}
+                    onChange={setDueDate}
+                    placeholder="Change due date" />
+                 </Field>
                 <Field>
                 <Textarea
                   id="description"

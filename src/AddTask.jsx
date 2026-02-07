@@ -17,9 +17,10 @@ function AddTask() {
   const [ dueDate, setDueDate ] = useState(null)
 
   const handleAddTask = async () => {
-    await addTask(title, description)
+    await addTask(title, description, dueDate)
     setTitle('')
     setDescription('')
+    setDueDate(null)
   }
 
   return (
@@ -64,8 +65,9 @@ function AddTask() {
         {
           tasks.filter(t => !t.completed).map(tasks => (
             <div className="m-4 p-6 min-w-[300px] text-center bg-card border-solid border rounded w-2/3 mx-auto" key={tasks.id}>
-              <div className="pb-6 font-bold text-sm">{tasks.title}</div>
+              <div className="pb-6 font-bold text-lg">{tasks.title}</div>
               {tasks.description && <div className="pb-6 text-sm">{tasks.description}</div>}
+              {tasks.due_date && <div className="pb-6 text-sm">📅 Due Date: {new Date(tasks.due_date).toLocaleDateString()}</div>}
                 <div>
                   <Button className="m-2 w-1/3" variant="outline" size="sm" onClick={() => setEditingTask(tasks)}>Update</Button>
                   <Button className="w-1/3" variant="default" size="sm" onClick={() => completeTask(tasks.id)}>Complete</Button>
@@ -78,7 +80,7 @@ function AddTask() {
       <div className="p-4" ><Separator /></div>
 
       <div className="max-w-2xl mx-auto p-4">   
-      <h2 className="text-lg pb-4 text-center font-bold">Complete Tasks</h2>
+      <h2 className="text-lg pb-4 text-center font-bold">Completed Tasks</h2>
       <div>
         {tasks
           .filter((t) => t.completed)
@@ -86,6 +88,7 @@ function AddTask() {
             <div className="m-4 min-w-[300px] text-center card border-solid border p-6 w-2/3 mx-auto" key={tasks.id}>
               <div className="pb-6 font-bold text-sm">{tasks.title}</div>
               {tasks.description && <div className="pb-6 text-sm">{tasks.description}</div>}
+              {tasks.completed_at && <div className="pb-6 text-sm">Finished on: {new Date(tasks.completed_at).toLocaleDateString()}</div>}
               <div>
               <Button  className="m-1" variant="destructive" size="sm" onClick={() => deleteTask(tasks.id)}>Delete</Button>
               </div>

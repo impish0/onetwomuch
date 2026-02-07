@@ -49,7 +49,9 @@ const fetchTasks = useCallback(async () => {
     // complete task
     const completeTask = useCallback(async (id) => {
       const { error } = await supabase.from('tasks').update({
-        completed: true }).eq('id', id)
+        completed: true,
+        completed_at: new Date().toISOString()
+        }).eq('id', id)
 
         if (error) {
             console.error('Task completion error:', error)
