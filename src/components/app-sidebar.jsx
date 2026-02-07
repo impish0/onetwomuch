@@ -33,8 +33,8 @@ const data = {
           url: "/add-tasks",
         },
         {
-          title: "My Tasks",
-          url: "/my-tasks",
+          title: "Notes",
+          url: "/notes",
         }
       ],
     },
@@ -52,7 +52,7 @@ export function AppSidebar({
     window.location.href="/login"
   }
   return (
-    <Sidebar {...props} className="bg-[var(--sidebar-background)]">
+    <Sidebar {...props} className="bg-sidebar-background">
       <SidebarContent>
       <SidebarHeader>
         <SidebarMenu>
