@@ -24,7 +24,7 @@ const fetchTasks = useCallback(async () => {
     
     if (!trimmedTitle) return
 
-    const { error } = await supabase.from('task').insert([{
+    const { error } = await supabase.from('tasks').insert([{
         title: trimmedTitle,
         description: trimmedDescription,
         due_date: dueDate
