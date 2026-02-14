@@ -64,7 +64,7 @@ function AddTask() {
       <div>
         {
           tasks.filter(t => !t.completed).map(tasks => (
-            <div className="m-4 p-6 min-w-[300px] text-center bg-card border-solid border rounded w-2/3 mx-auto" key={tasks.id}>
+            <div className="m-4 p-6 min-w-75 text-center bg-card border-solid border rounded w-2/3 mx-auto" key={tasks.id}>
               <div className="pb-6 font-bold text-lg">{tasks.title}</div>
               {tasks.description && <div className="pb-6 text-sm">{tasks.description}</div>}
               {tasks.due_date && <div className="pb-6 text-sm">📅 Due Date: {new Date(tasks.due_date).toLocaleDateString()}</div>}
@@ -85,7 +85,7 @@ function AddTask() {
         {tasks
           .filter((t) => t.completed)
           .map((tasks) => (
-            <div className="m-4 min-w-[300px] text-center card border-solid border p-6 w-2/3 mx-auto" key={tasks.id}>
+            <div className="m-4 min-w-75 text-center card border-solid border p-6 w-2/3 mx-auto" key={tasks.id}>
               <div className="pb-6 font-bold text-sm">{tasks.title}</div>
               {tasks.description && <div className="pb-6 text-sm">{tasks.description}</div>}
               {tasks.completed_at && <div className="pb-6 text-sm">Finished on: {new Date(tasks.completed_at).toLocaleDateString()}</div>}
